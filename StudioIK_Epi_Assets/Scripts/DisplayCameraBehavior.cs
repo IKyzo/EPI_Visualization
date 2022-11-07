@@ -5,7 +5,7 @@ using UnityEngine;
 public class DisplayCameraBehavior : MonoBehaviour
 {
 
-    // [TODO] ADD LIST MANAGER SCRIPT
+    // [TODO] ADD LIST MANAGER SCRIPT, CLEAN THIS CODE , BRUH
 
     public Transform targetTransform;
     private float rotationSpeed = 0.25f;
@@ -15,23 +15,33 @@ public class DisplayCameraBehavior : MonoBehaviour
 
 
     public List<Transform> displayItems = new List<Transform>();
-    private Transform currentDisplayTarget;
-    private Transform nextDisplayTarget;
-    private Transform previousDisplayTarget;
-    private int index=0;
+    [SerializeField]private Transform currentDisplayTarget;
+    [SerializeField]private Transform nextDisplayTarget;
+    [SerializeField]private Transform previousDisplayTarget;
+    [SerializeField]private int indexDisplay=0;
+
+
+    // Lerp Stuff
+
+
+
     // Start is called before the first frame update
     private void Awake() {
         // initilize offset 
         //offset = transform.   
-        currentDisplayTarget = displayItems[index];
-        nextDisplayTarget = displayItems[index+1]; 
+        currentDisplayTarget = displayItems[indexDisplay];
+        nextDisplayTarget = displayItems[indexDisplay+1]; 
+
     }
     void Start()
     {
-        point = targetTransform.position;
-        initCameraPosition = targetTransform.position  + new Vector3(offset, offset, 0f);   
+        point = currentDisplayTarget.position;
+        initCameraPosition = currentDisplayTarget.position  + new Vector3(0f, offset, offset - 10f);   
         transform.position = initCameraPosition;
         transform.LookAt(point);
+
+
+        Debug.Log("List count is : "+ displayItems.Count);
     }
 
     // Update is called once per frame
@@ -42,18 +52,121 @@ public class DisplayCameraBehavior : MonoBehaviour
         //transform.Translate(Vector3.right * Time.deltaTime * rotationSpeed);
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
-            point = nextDisplayTarget.position;
-            initCameraPosition = nextDisplayTarget.position + new Vector3(offset, offset, 0f); 
-            transform.position = initCameraPosition;
-            transform.LookAt(point);
-        }
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
-        {
+
+            if (UpdateDisplay(1) == 1)
+            {
+                point = nextDisplayTarget.position;
+                initCameraPosition = nextDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
+                transform.position = initCameraPosition;
+                transform.LookAt(point);
+                // update the Display Targets
+                if(indexDisplay != displayItems.Count)
+                {
+                    currentDisplayTarget = displayItems[indexDisplay];
+                    if (indexDisplay!=displayItems.Count-1)
+                    {
+                        nextDisplayTarget = displayItems[indexDisplay + 1];
+                    }
+                    previousDisplayTarget = displayItems[indexDisplay - 1];
+                }
+             
+            
+            }
 
         }
+		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		{
+            if (UpdateDisplay(-1) == 1)
+            {
+                point = previousDisplayTarget.position;
+                initCameraPosition = previousDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
+                transform.position = initCameraPosition;
+                transform.LookAt(point);
+                // update the Display Targets
+                currentDisplayTarget = displayItems[indexDisplay];
+                if (indexDisplay != 0)
+                {
+                    previousDisplayTarget = displayItems[indexDisplay - 1];
+                }
+                nextDisplayTarget = displayItems[indexDisplay + 1];
+                
+                
+                
+                //if (indexDisplay != 0)
+                //{
+                //    currentDisplayTarget = displayItems[indexDisplay];
+                //    if (indexDisplay != displayItems.Count + 1)
+                //    {
+                //        previousDisplayTarget = displayItems[indexDisplay - 1];
+                //    }
+                //    nextDisplayTarget = displayItems[indexDisplay+1];
+                //}
+            }
+		}
+
     }
-    
+
+    int UpdateDisplay(int listAdvancement) // 1 = Change || 0 = No Change
+    {
+
+		if (listAdvancement==1)
+		{
+            if (indexDisplay == displayItems.Count - 1)
+            {
+                return 0;
+            }
+            else
+            {
+                indexDisplay++;
+                return 1;
+            }
+
+		}
+		else if (listAdvancement==-1)
+		{
+            if (indexDisplay == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                indexDisplay--;
+                return 1;
+            }
+		}
+        else
+		{
+            Debug.Log("Update Display Input not valid");
+            return 0;
+		}
+
+
+
+
+        // Managing limits in the list :
+        // 3 items = limit is 3
+        //if (indexDisplay!= 0 && listAdvancement==-1)
+        //{
+        //    currentDisplayTarget = displayItems[indexDisplay + listAdvancement];
+        //    return 1;
+        //}
+        //if (indexDisplay!=0 && indexDisplay != displayItems.Count)
+        //{
+        //    nextDisplayTarget = displayItems[indexDisplay + listAdvancement];
+        //    return 1;
+        //}
+        //if (indexDisplay != 0)
+        //{
+        //    previousDisplayTarget = displayItems[indexDisplay - listAdvancement];
+        //    return 1;
+        //}
+        //Debug.Log("Returning 0");
+        //return 0;
+        
+    }
+
 }
+
 
 /*
    public TargetClass target;//the target object
