@@ -10,8 +10,8 @@ public class DisplayCameraBehavior : MonoBehaviour
     public Transform targetTransform;
     private float rotationSpeed = 0.25f;
     private float offset = 150f;
-    private Vector3 point;
-    private Vector3 initCameraPosition;
+    [SerializeField]private Vector3 point;
+    [SerializeField]private Vector3 initCameraPosition;
 
 
     public List<Transform> displayItems = new List<Transform>();
@@ -30,9 +30,9 @@ public class DisplayCameraBehavior : MonoBehaviour
     float endValue=10;
     float valueToLerp;
     Vector3 cameraStartingPosition;
+    Vector3 cameraOffsetPosition;
+    int cameraDirection;
 
-
-    // Start is called before the first frame update
     private void Awake() {
         // initilize offset 
         //offset = transform.   
@@ -40,30 +40,13 @@ public class DisplayCameraBehavior : MonoBehaviour
         nextDisplayTarget = displayItems[indexDisplay+1]; 
 
     }
-  //  IEnumerator Lerp()
-  //  {
-  //      float timeElapsed = 0;
-		//while (timeElapsed<lerpDuration)
-		//{
-  //          valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
-  //          timeElapsed += Time.deltaTime;
-  //          yield return null;
-  //          Debug.Log("value to lerp = " + valueToLerp);
-  //      }
-  //      valueToLerp = endValue;
-  //  }
     void Start()
     {
-        // Testing Coroutines
-        //StartCoroutine(Lerp());
-        
         point = currentDisplayTarget.position;
         initCameraPosition = currentDisplayTarget.position  + new Vector3(0f, offset, offset - 10f);   
         transform.position = initCameraPosition;
         transform.LookAt(point);
         cameraStartingPosition = transform.position;
-
-
         //Debug.Log("List count is : "+ displayItems.Count);
     }
 
@@ -88,20 +71,23 @@ public class DisplayCameraBehavior : MonoBehaviour
 
             if (UpdateDisplay(1) == 1)
             {
-                point = nextDisplayTarget.position;
-                initCameraPosition = nextDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
-                transform.position = initCameraPosition;
-                transform.LookAt(point);
                 // update the Display Targets
-                if(indexDisplay != displayItems.Count)
+                if (indexDisplay != displayItems.Count)
                 {
                     currentDisplayTarget = displayItems[indexDisplay];
-                    if (indexDisplay!=displayItems.Count-1)
+                    if (indexDisplay != displayItems.Count - 1)
                     {
                         nextDisplayTarget = displayItems[indexDisplay + 1];
                     }
                     previousDisplayTarget = displayItems[indexDisplay - 1];
                 }
+                point = currentDisplayTarget.position;
+                cameraOffsetPosition = transform.position;
+                // Translation Part 
+                displayMode = false;
+                animateCamera = true;
+                cameraDirection = 1;
+
              
             
             }
@@ -111,10 +97,6 @@ public class DisplayCameraBehavior : MonoBehaviour
 		{
             if (UpdateDisplay(-1) == 1)
             {
-                point = previousDisplayTarget.position;
-                initCameraPosition = previousDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
-                transform.position = initCameraPosition;
-                transform.LookAt(point);
                 // update the Display Targets
                 currentDisplayTarget = displayItems[indexDisplay];
                 if (indexDisplay != 0)
@@ -122,6 +104,19 @@ public class DisplayCameraBehavior : MonoBehaviour
                     previousDisplayTarget = displayItems[indexDisplay - 1];
                 }
                 nextDisplayTarget = displayItems[indexDisplay + 1];
+                point = currentDisplayTarget.position;
+                cameraOffsetPosition = transform.position;
+
+                // Translation Part 
+                displayMode = false;
+                animateCamera = true;
+                cameraDirection = -1;
+
+
+                //initCameraPosition = previousDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
+                //transform.position = initCameraPosition;
+                //transform.LookAt(point);
+                
                 
                 
                 
@@ -136,37 +131,48 @@ public class DisplayCameraBehavior : MonoBehaviour
                 //}
             }
 		}
-		if (Input.GetKey(KeyCode.Space))
-		{
-            displayMode = false;
-            animateCamera = true;
-            //if (timeElapsed < lerpDuration)
-            //{
-            //    valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
-            //    timeElapsed += Time.deltaTime;
-            //    Debug.Log("Value to lerp = " + valueToLerp);
-            //}
-        }
         if (animateCamera)
         {
             cameraStartingPosition = transform.position;
-            CameraTransition();
+            CameraTransition( cameraDirection );
         }
 
     }
-    void CameraTransition()
+    void CameraTransition(int direction)
     {
+        Vector3 cameraEndingPosition;
+        if (direction == 1)
+        {
+            cameraEndingPosition = currentDisplayTarget.position;
+        }
+        else if (direction == -1)
+        {
+            cameraEndingPosition = currentDisplayTarget.position;
+        }
+        else { Debug.Log("Error : direction input  - CameraTransition"); cameraEndingPosition = new Vector3(0, 0, 0); }
         if (timeElapsed < lerpDuration - 2)
         {
             timeElapsed +=  Time.deltaTime;
-            transform.position = Vector3.Lerp(cameraStartingPosition, new Vector3(nextDisplayTarget.position.x, nextDisplayTarget.position.y + offset, nextDisplayTarget.position.z + offset - 10f), timeElapsed / lerpDuration);
+            //transform.position = Vector3.Lerp(cameraStartingPosition, new Vector3(cameraEndingPosition.x, cameraEndingPosition.y + offset, cameraEndingPosition.z + offset - 10f), timeElapsed / lerpDuration);
+            transform.position = Vector3.Lerp(cameraStartingPosition, new Vector3(cameraOffsetPosition.x + (150f * direction), cameraOffsetPosition.y, cameraOffsetPosition.z), timeElapsed / lerpDuration);
             Debug.Log("Time Elapsed : " + timeElapsed);
         }
         else
         {
             displayMode = true;
             animateCamera = false;
-            point = nextDisplayTarget.position;
+            if (direction == 1)
+            { point = currentDisplayTarget.position;
+                initCameraPosition = currentDisplayTarget.position + new Vector3(0f, offset, offset - 10f);
+                //transform.position = initCameraPosition;
+                transform.LookAt(point);
+            }
+            else
+            { 
+                point = currentDisplayTarget.position;
+                transform.LookAt(point);
+            }
+            timeElapsed = 0;
         }
     }
     int UpdateDisplay(int listAdvancement) // 1 = Change || 0 = No Change
