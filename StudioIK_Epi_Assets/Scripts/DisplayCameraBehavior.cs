@@ -19,10 +19,17 @@ public class DisplayCameraBehavior : MonoBehaviour
     [SerializeField]private Transform nextDisplayTarget;
     [SerializeField]private Transform previousDisplayTarget;
     [SerializeField]private int indexDisplay=0;
+    private bool displayMode = true;
+    private bool animateCamera = false;
 
 
     // Lerp Stuff
-
+    float timeElapsed = 0;
+    float lerpDuration = 3;
+    float startValue=0;
+    float endValue=10;
+    float valueToLerp;
+    Vector3 cameraStartingPosition;
 
 
     // Start is called before the first frame update
@@ -33,21 +40,47 @@ public class DisplayCameraBehavior : MonoBehaviour
         nextDisplayTarget = displayItems[indexDisplay+1]; 
 
     }
+  //  IEnumerator Lerp()
+  //  {
+  //      float timeElapsed = 0;
+		//while (timeElapsed<lerpDuration)
+		//{
+  //          valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
+  //          timeElapsed += Time.deltaTime;
+  //          yield return null;
+  //          Debug.Log("value to lerp = " + valueToLerp);
+  //      }
+  //      valueToLerp = endValue;
+  //  }
     void Start()
     {
+        // Testing Coroutines
+        //StartCoroutine(Lerp());
+        
         point = currentDisplayTarget.position;
         initCameraPosition = currentDisplayTarget.position  + new Vector3(0f, offset, offset - 10f);   
         transform.position = initCameraPosition;
         transform.LookAt(point);
+        cameraStartingPosition = transform.position;
 
 
-        Debug.Log("List count is : "+ displayItems.Count);
+        //Debug.Log("List count is : "+ displayItems.Count);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.RotateAround(point, new Vector3(0f, 5f, 0f), 20 * Time.deltaTime * rotationSpeed);
+
+        //if (timeElapsed < lerpDuration)
+        //{
+        //    valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
+        //    timeElapsed += Time.deltaTime;
+        //    Debug.Log("Value to lerp = " + valueToLerp);
+        //}
+        if (displayMode)
+        {
+            transform.RotateAround(point, new Vector3(0f, 5f, 0f), 20 * Time.deltaTime * rotationSpeed);
+        }
         //transform.LookAt(targetTransform);
         //transform.Translate(Vector3.right * Time.deltaTime * rotationSpeed);
         if(Input.GetKeyDown(KeyCode.RightArrow))
@@ -103,9 +136,39 @@ public class DisplayCameraBehavior : MonoBehaviour
                 //}
             }
 		}
+		if (Input.GetKey(KeyCode.Space))
+		{
+            displayMode = false;
+            animateCamera = true;
+            //if (timeElapsed < lerpDuration)
+            //{
+            //    valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
+            //    timeElapsed += Time.deltaTime;
+            //    Debug.Log("Value to lerp = " + valueToLerp);
+            //}
+        }
+        if (animateCamera)
+        {
+            cameraStartingPosition = transform.position;
+            CameraTransition();
+        }
 
     }
-
+    void CameraTransition()
+    {
+        if (timeElapsed < lerpDuration - 2)
+        {
+            timeElapsed +=  Time.deltaTime;
+            transform.position = Vector3.Lerp(cameraStartingPosition, new Vector3(nextDisplayTarget.position.x, nextDisplayTarget.position.y + offset, nextDisplayTarget.position.z + offset - 10f), timeElapsed / lerpDuration);
+            Debug.Log("Time Elapsed : " + timeElapsed);
+        }
+        else
+        {
+            displayMode = true;
+            animateCamera = false;
+            point = nextDisplayTarget.position;
+        }
+    }
     int UpdateDisplay(int listAdvancement) // 1 = Change || 0 = No Change
     {
 
