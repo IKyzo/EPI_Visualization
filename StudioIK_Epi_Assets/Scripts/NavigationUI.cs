@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 public class NavigationUI : MonoBehaviour
 {
     //public CubeController cube;
-    public SceneCenter sceneController;
     private VisualElement root;
     private Button buttonNavigate;
 

@@ -1,8 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/StudioIK_Epi_Assets/UI/stylesheet.uss?fileID=7433441132597879392&amp;guid=c79d3d73ad49ea04383734f74edd1b95&amp;type=3#stylesheet" />
-    <ui:VisualElement style="flex-grow: 1; justify-content: flex-end; background-color: rgba(255, 255, 255, 0); flex-direction: column;">
+    <ui:VisualElement style="flex-grow: 1; justify-content: space-between; background-color: rgba(255, 255, 255, 0); flex-direction: column; align-items: center;">
+        <ui:VisualElement name="UpperContainer" style="flex-direction: row; align-items: center; justify-content: space-around; flex-basis: 10%; flex-grow: 0; flex-shrink: 0;">
+            <ui:Button display-tooltip-when-elided="true" name="TimeCycle" style="flex-direction: column; align-items: center; justify-content: center; flex-basis: 100%; height: 30px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 20px; padding-right: 20px; padding-top: 5px; padding-bottom: 5px; flex-shrink: 0; width: auto; background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/Collaborate/Assets/Icons/collaborate-dark@2x.png?fileID=2800000&amp;guid=158d9c687149a0e499002e08c9420c70&amp;type=3#collaborate-dark@2x&apos;); background-color: rgba(63, 63, 63, 0); -unity-background-image-tint-color: rgb(255, 253, 136);" />
+        </ui:VisualElement>
         <ui:VisualElement name="Container" style="justify-content: space-around; align-items: center; flex-basis: 20%; flex-direction: row; overflow: visible; visibility: visible;">
-            <ui:Button text="Navigate" display-tooltip-when-elided="true" name="Navigation" class="button" style="align-items: center; width: auto; justify-content: center; flex-direction: column; flex-basis: 20%; height: 35px;" />
+            <ui:Button text="Navigate" display-tooltip-when-elided="true" name="Navigation" class="button" style="align-items: center; width: auto; justify-content: center; flex-direction: column; flex-basis: auto; height: 35px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

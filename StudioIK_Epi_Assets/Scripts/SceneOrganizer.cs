@@ -11,6 +11,9 @@ public class SceneOrganizer : MonoBehaviour
 
    [SerializeField] private GameObject loaderCanvas;
    [SerializeField] private Image loadingCircle;
+   private bool loadingAnimation = false;
+   private float loadingAngle=-1f;
+   private float loadingSpeed=100f;
 
 
    private void Awake() {
@@ -29,21 +32,33 @@ public class SceneOrganizer : MonoBehaviour
 
    public async void LoadScene(string sceneName)
    {
+      Debug.Log("Loading Scene");
+      loadingAngle=-1f;
       var scene = SceneManager.LoadSceneAsync(sceneName);
       scene.allowSceneActivation = false;
 
       loaderCanvas.SetActive(true);
-
-
-      do {
-         await Task.Delay(100);
-         loadingCircle.rectTransform.eulerAngles = new Vector3(0f, 0f, -90f);
-
-      } while(scene.progress < 0.9f);
+      loadingAnimation=true;
+      //await Task.Delay(5000);
+      if(scene.progress > 0.9f)
+      {
+         loadingAnimation=false;
+      }
       
-      await Task.Delay(5000);
+      
       scene.allowSceneActivation = true;
       loaderCanvas.SetActive(false);
+      Debug.Log("Loading Scene Done");
+   }
+
+
+   private void Update() {
+      if(loadingAnimation)
+      {
+         loadingAngle += Time.deltaTime * loadingSpeed * -1;
+         loadingCircle.rectTransform.eulerAngles = new Vector3(0f, 0f, loadingAngle);
+      }
+
    }
 
 

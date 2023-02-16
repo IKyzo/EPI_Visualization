@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/StudioIK_Epi_Assets/UI/interior_stylesheet.uss?fileID=7433441132597879392&amp;guid=91ef123c0d826c444ace18b8fcd3def5&amp;type=3#interior_stylesheet" />
+    <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: flex-end;">
+        <ui:VisualElement name="Container" style="flex-direction: column; flex-grow: 1; flex-basis: 0; width: 40%; align-items: flex-end; justify-content: flex-start; background-color: rgba(200, 200, 200, 0.39); opacity: 1; visibility: hidden; overflow: visible; display: flex;">
+            <ui:Button text="First Floor" display-tooltip-when-elided="true" class="button" style="justify-content: flex-start; flex-basis: auto; flex-grow: 0; flex-shrink: 0; width: 100%; margin-bottom: initial; margin-top: initial; margin-left: initial; margin-right: initial; padding-left: 0; padding-right: 0; padding-top: 5px; padding-bottom: 5px;" />
+            <ui:Button text="Second Floor" display-tooltip-when-elided="true" class="button" style="width: 100%; margin-bottom: 0; margin-top: 0; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 5px; padding-bottom: 5px;" />
+            <ui:Button text="Third Floor" display-tooltip-when-elided="true" class="button" style="width: 100%; margin-bottom: 0; margin-top: 0; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 5px; padding-bottom: 5px;" />
+            <ui:Button text="Forth Floor" display-tooltip-when-elided="true" class="button" style="width: 100%; margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 5px; padding-bottom: 5px;" />
+            <ui:Button text="Fifth Floor" display-tooltip-when-elided="true" class="button" style="width: 100%; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 5px; padding-bottom: 5px; margin-left: 0; margin-right: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ContainerMenu" style="position: absolute; width: 40px; height: 35px; background-image: none; -unity-background-image-tint-color: rgb(63, 63, 63);">
+            <ui:Button display-tooltip-when-elided="true" name="MenuIcon" style="background-image: url(&apos;project://database/Assets/StudioIK_Epi_Assets/Sprites%201/menu.png?fileID=2800000&amp;guid=b5efaf3458623ae4090b6881bbc42f8b&amp;type=3#menu&apos;); -unity-background-image-tint-color: rgb(255, 255, 255); margin-bottom: 0; margin-top: 0; margin-right: 0; margin-left: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%; height: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
